@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>WoW Classic: LTBC</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background: #fafafa;
+        color: #333;
+      }
+      h1 {
+        margin-bottom: 16px;
+      }
+
+      #materialListContainer a {
+        color: #2c3e50;
+        text-decoration: none;
+      }
+      #materialListContainer a:hover {
+        text-decoration: underline;
+      }
+
+      .briefing-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+      }
+      .card {
+        background: white;
+        border-radius: 6px;
+        box-shadow: 0 2px 5px rgb(0 0 0 / 0.1);
+        padding: 1rem;
+      }
+      .briefing-card h3 {
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+      }
+      .count-input {
+        width: 60px;
+        font-size: 1rem;
+        text-align: center;
+        padding: 0.25rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+        display: block;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      table td {
+        padding: 6px 8px;
+        border-bottom: 1px solid #ddd;
+      }
+      table tr:first-child td {
+        font-weight: 700;
+        border-bottom: 2px solid #ccc;
+        color: #222;
+      }
+      .total-card {
+        background: #e0f7fa;
+        font-weight: bold;
+        text-align: center;
+        color: #00796b;
+      }
+      .total-card .total-value {
+        font-size: 2rem;
+        margin-top: 0.5rem;
+      }
+      .faction-horde {
+        color: #c0392b; /* deep red */
+        font-weight: bold;
+      }
+
+      .faction-alliance {
+        color: #2980b9; /* deep blue */
+        font-weight: bold;
+      }
+
+      .material-list {
+        margin-top: 2rem;
+        padding: 1rem;
+        background: #fff;
+        border-radius: 6px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        max-width: 100%;
+        overflow-x: auto;
+      }
+      .material-list table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .material-list th,
+      .material-list td {
+        padding: 0.5rem;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+      }
+      .material-list th {
+        background-color: #f0f0f0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>WoW Classic: Logistics Task Briefing Calculator (LTBC)</h1>
+
+    <div class="briefing-grid" aria-label="Logistics Task Briefings Details">
+      <div class="card briefing-card">
+        <h3>Logistics Task Briefing I</h3>
+        <input
+          type="number"
+          class="count-input"
+          min="0"
+          value="0"
+          data-task="0"
+          aria-label="Count for Task I"
+        />
+        <table>
+          <tr>
+            <td>Items</td>
+            <td>Total</td>
+          </tr>
+          <tr>
+            <td>Globe of Water</td>
+            <td class="item-qty" data-base="4">4</td>
+          </tr>
+          <tr>
+            <td>Powerful Anti-Venom</td>
+            <td class="item-qty" data-base="4">4</td>
+          </tr>
+          <tr>
+            <td>Smoked Desert Dumplings</td>
+            <td class="item-qty" data-base="4">4</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card briefing-card">
+        <h3>Logistics Task Briefing II</h3>
+        <input
+          type="number"
+          class="count-input"
+          min="0"
+          value="0"
+          data-task="1"
+          aria-label="Count for Task II"
+        />
+        <table>
+          <tr>
+            <td>Items</td>
+            <td>Total</td>
+          </tr>
+          <tr>
+            <td>Ornate Mithril Boots</td>
+            <td class="item-qty" data-base="3">3</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card briefing-card">
+        <h3>Logistics Task Briefing III</h3>
+        <input
+          type="number"
+          class="count-input"
+          min="0"
+          value="0"
+          data-task="2"
+          aria-label="Count for Task III"
+        />
+        <table>
+          <tr>
+            <td>Items</td>
+            <td>Total</td>
+          </tr>
+          <tr>
+            <td>Dense Grinding Stone</td>
+            <td class="item-qty" data-base="10">10</td>
+          </tr>
+          <tr>
+            <td>Solid Grinding Stone</td>
+            <td class="item-qty" data-base="10">10</td>
+          </tr>
+          <tr>
+            <td>Heavy Grinding Stone</td>
+            <td class="item-qty" data-base="10">10</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card briefing-card">
+        <h3>Logistics Task Briefing IV</h3>
+        <input
+          type="number"
+          class="count-input"
+          min="0"
+          value="0"
+          data-task="3"
+          aria-label="Count for Task IV"
+        />
+        <table>
+          <tr>
+            <td>Items</td>
+            <td>Total</td>
+          </tr>
+          <tr>
+            <td>Oil of Immolation (Alliance)</td>
+            <td class="item-qty" data-base="6">6</td>
+          </tr>
+          <tr>
+            <td>Goblin Rocket Fuel (Alliance)</td>
+            <td class="item-qty" data-base="5">5</td>
+          </tr>
+          <tr>
+            <td>Dense Blasting Powder (Alliance)</td>
+            <td class="item-qty" data-base="10">10</td>
+          </tr>
+          <tr>
+            <td>Oil of Immolation (Horde)</td>
+            <td class="item-qty" data-base="8">8</td>
+          </tr>
+          <tr>
+            <td>Flask of Big Mojo (Horde)</td>
+            <td class="item-qty" data-base="6">6</td>
+          </tr>
+          <tr>
+            <td>Powerful Mojo (Horde)</td>
+            <td class="item-qty" data-base="6">6</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card briefing-card">
+        <h3>Logistics Task Briefing V</h3>
+        <input
+          type="number"
+          class="count-input"
+          min="0"
+          value="0"
+          data-task="4"
+          aria-label="Count for Task V"
+        />
+        <table>
+          <tr>
+            <td>Items</td>
+            <td>Total</td>
+          </tr>
+          <tr>
+            <td>Large Brilliant Shard</td>
+            <td class="item-qty" data-base="1">1</td>
+          </tr>
+          <tr>
+            <td>Large Radiant Shard</td>
+            <td class="item-qty" data-base="1">1</td>
+          </tr>
+          <tr>
+            <td>Huge Emerald</td>
+            <td class="item-qty" data-base="1">1</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card briefing-card">
+        <h3>Logistics Task Briefing VI</h3>
+        <input
+          type="number"
+          class="count-input"
+          min="0"
+          value="0"
+          data-task="5"
+          aria-label="Count for Task VI"
+        />
+        <table>
+          <tr>
+            <td>Items</td>
+            <td>Total</td>
+          </tr>
+          <tr>
+            <td>Moonsteel Broadsword (Alliance)</td>
+            <td class="item-qty" data-base="2">2</td>
+          </tr>
+          <tr>
+            <td>Massive Iron Axe (Horde)</td>
+            <td class="item-qty" data-base="3">3</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card briefing-card">
+        <h3>Logistics Task Briefing VII</h3>
+        <input
+          type="number"
+          class="count-input"
+          min="0"
+          value="0"
+          data-task="6"
+          aria-label="Count for Task VII"
+        />
+        <table>
+          <tr>
+            <td>Items</td>
+            <td>Total</td>
+          </tr>
+          <tr>
+            <td>Rugged Armor Kit</td>
+            <td class="item-qty" data-base="8">8</td>
+          </tr>
+          <tr>
+            <td>Heavy Armor Kit</td>
+            <td class="item-qty" data-base="8">8</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card briefing-card">
+        <h3>Logistics Task Briefing VIII</h3>
+        <input
+          type="number"
+          class="count-input"
+          min="0"
+          value="0"
+          data-task="7"
+          aria-label="Count for Task VIII"
+        />
+        <table>
+          <tr>
+            <td>Items</td>
+            <td>Total</td>
+          </tr>
+          <tr>
+            <td>Mooncloth</td>
+            <td class="item-qty" data-base="1">1</td>
+          </tr>
+          <tr>
+            <td>Bolt of Runecloth</td>
+            <td class="item-qty" data-base="2">2</td>
+          </tr>
+          <tr>
+            <td>Ironweb Spider Silk</td>
+            <td class="item-qty" data-base="1">1</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card briefing-card">
+        <h3>Logistics Task Briefing IX</h3>
+        <input
+          type="number"
+          class="count-input"
+          min="0"
+          value="0"
+          data-task="8"
+          aria-label="Count for Task IX"
+        />
+        <table>
+          <tr>
+            <td>Items</td>
+            <td>Total</td>
+          </tr>
+          <tr>
+            <td>Enchanted Thorium Bar</td>
+            <td class="item-qty" data-base="2">2</td>
+          </tr>
+          <tr>
+            <td>Enchanted Leather</td>
+            <td class="item-qty" data-base="2">2</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card briefing-card">
+        <h3>Logistics Task Briefing X</h3>
+        <input
+          type="number"
+          class="count-input"
+          min="0"
+          value="0"
+          data-task="9"
+          aria-label="Count for Task X"
+        />
+        <table>
+          <tr>
+            <td>Items</td>
+            <td>Total</td>
+          </tr>
+          <tr>
+            <td>Heavy Runecloth Bandage</td>
+            <td class="item-qty" data-base="30">30</td>
+          </tr>
+          <tr>
+            <td>Heavy Mageweave Bandage</td>
+            <td class="item-qty" data-base="30">30</td>
+          </tr>
+          <tr>
+            <td>Heavy Silk Bandage</td>
+            <td class="item-qty" data-base="30">30</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card briefing-card">
+        <h3>Logistics Task Briefing XI</h3>
+        <input
+          type="number"
+          class="count-input"
+          min="0"
+          value="0"
+          data-task="10"
+          aria-label="Count for Task XI"
+        />
+        <table>
+          <tr>
+            <td>Items</td>
+            <td>Total</td>
+          </tr>
+          <tr>
+            <td>Skin of Shadow</td>
+            <td class="item-qty" data-base="1">1</td>
+          </tr>
+          <tr>
+            <td>Frayed Abomination Stitching</td>
+            <td class="item-qty" data-base="3">3</td>
+          </tr>
+          <tr>
+            <td>Twilight Cultist Robe</td>
+            <td class="item-qty" data-base="1">1</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card total-card">
+        <h3>Total Tasks</h3>
+        <div class="total-value" id="totalTasks">11</div>
+      </div>
+    </div>
+
+    <h2>Material List</h2>
+    <div id="materialListContainer" class="material-list"></div>
+
+    <script>
+      /**
+       * Updates the total number of tasks selected
+       * and recalculates each item's multiplied quantity per task card.
+       */
+      function updateTaskTotals() {
+        const inputs = document.querySelectorAll(".count-input");
+        let grandTotal = 0;
+
+        inputs.forEach((input) => {
+          const count = parseInt(input.value) || 0;
+          grandTotal += count;
+
+          const card = input.closest(".card");
+          card?.querySelectorAll(".item-qty").forEach((td) => {
+            const base = parseInt(td.getAttribute("data-base"));
+            td.textContent = base * count;
+          });
+        });
+
+        // Update grand total in UI
+        document.getElementById("totalTasks").textContent = grandTotal;
+      }
+
+      /**
+       * Adds color to faction labels within item names:
+       * (Alliance) in blue, (Horde) in red.
+       */
+      function colorFactions() {
+        const cells = document.querySelectorAll(".card td");
+
+        cells.forEach((cell) => {
+          let html = cell.innerHTML;
+          html = html.replace(
+            /\(Horde\)/g,
+            '<span class="faction-horde">(Horde)</span>'
+          );
+          html = html.replace(
+            /\(Alliance\)/g,
+            '<span class="faction-alliance">(Alliance)</span>'
+          );
+          cell.innerHTML = html;
+        });
+      }
+
+      /**
+       * Builds the material list of all materials required based on
+       * task counts and item recipes defined in `materialData`.
+       * Now includes breakdown of which items require each material.
+       */
+      function generateMaterialList() {
+        const allCards = document.querySelectorAll(".briefing-card");
+        const taskCounts = document.querySelectorAll(".count-input");
+
+        // Store total and source breakdown for each material
+        const materialsNeeded = {};
+
+        allCards.forEach((card, index) => {
+          const multiplier = parseInt(taskCounts[index]?.value || 0);
+          if (multiplier === 0) return;
+
+          const rows = card.querySelectorAll("table tr:not(:first-child)");
+          rows.forEach((row) => {
+            const cells = row.querySelectorAll("td");
+            if (cells.length < 2) return;
+
+            const itemName = cells[0].textContent.trim();
+            const itemQty = parseInt(cells[1].textContent.trim());
+            const totalItemQty = itemQty * multiplier;
+
+            const recipe = materialData[itemName];
+
+            // If no recipe, treat the item as a base material itself
+            if (!recipe) {
+              if (!materialsNeeded[itemName]) {
+                materialsNeeded[itemName] = { sources: [] };
+              }
+
+              // Combine if already exists
+              const existingSource = materialsNeeded[itemName].sources.find(
+                (src) => src.item === itemName
+              );
+              if (existingSource) {
+                existingSource.qty += totalItemQty;
+              } else {
+                materialsNeeded[itemName].sources.push({
+                  item: itemName,
+                  qty: totalItemQty,
+                });
+              }
+              return;
+            }
+
+            for (const [matName, perUnit] of Object.entries(recipe)) {
+              const totalMatQty = Math.ceil(perUnit * totalItemQty);
+
+              if (!materialsNeeded[matName]) {
+                materialsNeeded[matName] = { sources: [] };
+              }
+
+              const existingSource = materialsNeeded[matName].sources.find(
+                (src) => src.item === itemName
+              );
+              if (existingSource) {
+                existingSource.qty += totalMatQty;
+              } else {
+                materialsNeeded[matName].sources.push({
+                  item: itemName,
+                  qty: totalMatQty,
+                });
+              }
+            }
+          });
+        });
+
+        // Build the table with an extra "Used In" column
+        const container = document.getElementById("materialListContainer");
+        const table = document.createElement("table");
+        const header = `<tr>
+          <th>Material</th>
+          <th>Total Required  (Alliance) (Horde)</th>
+          <th>Used In</th>
+        </tr>`;
+
+        const rows = Object.entries(materialsNeeded)
+          .sort(([a], [b]) => a.localeCompare(b))
+          .map(([mat, data]) => {
+            let allianceTotal = 0;
+            let hordeTotal = 0;
+            let neutralTotal = 0;
+
+            data.sources.forEach(({ item, qty }) => {
+              if (item.includes("(Alliance)")) {
+                allianceTotal += qty;
+              } else if (item.includes("(Horde)")) {
+                hordeTotal += qty;
+              } else {
+                neutralTotal += qty;
+              }
+            });
+
+            // Add neutral qty to both Alliance and Horde totals
+            allianceTotal += neutralTotal;
+            hordeTotal += neutralTotal;
+
+            // Build total string with colors
+            const totalRequiredHtml = `
+      <span class="faction-alliance">(${allianceTotal})</span>
+      <span class="faction-horde">(${hordeTotal})</span>
+    `;
+
+            // Build usedIn string as before
+            const usedIn = data.sources
+              .map(({ item, qty }) => {
+                const cleanName = item
+                  .replace(/\s*\((Horde|Alliance)\)/g, "")
+                  .trim();
+                const encodedName = encodeURIComponent(cleanName);
+                const url = `https://www.wowhead.com/classic/search?q=${encodedName}`;
+
+                let linkedItem = `<a href="${url}" target="_blank" rel="noopener noreferrer">${item}</a>`;
+
+                linkedItem = linkedItem.replace(
+                  /\(Horde\)/g,
+                  '<span class="faction-horde">(Horde)</span>'
+                );
+                linkedItem = linkedItem.replace(
+                  /\(Alliance\)/g,
+                  '<span class="faction-alliance">(Alliance)</span>'
+                );
+
+                return `${linkedItem} (${qty})`;
+              })
+              .join(", ");
+
+            return `<tr>
+      <td>${linkifyItemName(mat)}</td>
+      <td>${totalRequiredHtml}</td>
+      <td>${usedIn}</td>
+    </tr>`;
+          })
+          .join("");
+
+        table.innerHTML = header + rows;
+        container.innerHTML = "";
+        container.appendChild(table);
+      }
+
+      function linkifyItemName(itemName) {
+        const cleanName = itemName
+          .replace(/\s*\((Horde|Alliance)\)/g, "")
+          .trim();
+        const encodedName = encodeURIComponent(cleanName);
+        const url = `https://www.wowhead.com/classic/search?q=${encodedName}`;
+        return `<a href="${url}" target="_blank" rel="noopener noreferrer">${itemName}</a>`;
+      }
+
+      /**
+       * Runs once when page finishes loading.
+       * Initializes faction colors, total task count, and material list.
+       */
+      document.addEventListener("DOMContentLoaded", () => {
+        colorFactions();
+        updateTaskTotals();
+        generateMaterialList();
+      });
+
+      /**
+       * Sets up listeners on all count inputs to update totals and materials
+       * in real time as the user makes changes.
+       */
+      document.querySelectorAll(".count-input").forEach((input) => {
+        input.addEventListener("input", () => {
+          updateTaskTotals();
+          generateMaterialList();
+        });
+      });
+
+      /**
+       * Item → material data map for calculating crafting needs.
+       */
+      const materialData = {
+        "Powerful Anti-Venom": { "Huge Venom Sac": 1 },
+        "Smoked Desert Dumplings": {
+          "Sandworm Meat": 1,
+          "Soothing Spices": 1,
+        },
+        "Ornate Mithril Boots": {
+          "Mithril Bar": 14,
+          "Truesilver Bar": 2,
+          "Thick Leather": 4,
+          "Solid Grinding Stone": 1,
+          Aquamarine: 1,
+        },
+        "Dense Grinding Stone": { "Dense Stone": 4 },
+        "Solid Grinding Stone": { "Solid Stone": 4 },
+        "Heavy Grinding Stone": { "Heavy Stone": 3 },
+
+        "Oil of Immolation (Alliance)": {
+          Firebloom: 1,
+          Goldthorn: 1,
+          "Crystal Vial": 1,
+        },
+        "Oil of Immolation (Horde)": {
+          Firebloom: 1,
+          Goldthorn: 1,
+          "Crystal Vial": 1,
+        },
+        "Goblin Rocket Fuel": {
+          Firebloom: 1,
+          "Volatile Rum": 2,
+          "Leaded Vial": 1,
+        },
+        "Dense Blasting Powder": { "Dense Stone": 2 },
+
+        "Moonsteel Broadsword (Alliance)": {
+          "Steel Bar": 8,
+          "Strong Flux": 2,
+          "Heavy Grinding Stone": 2,
+          "Lesser Moonstone": 3,
+          "Heavy Leather": 3,
+        },
+        "Massive Iron Axe (Horde)": {
+          "Iron Bar": 14,
+          "Strong Flux": 2,
+          "Heavy Grinding Stone": 2,
+          "Gold Bar": 4,
+          "Heavy Leather": 2,
+        },
+
+        "Rugged Armor Kit": { "Rugged Leather": 5 },
+        "Heavy Armor Kit": {
+          "Heavy Leather": 5,
+          "Fine Thread": 1,
+        },
+
+        Mooncloth: { Felcloth: 2 },
+        "Bolt of Runecloth": { Runecloth: 5 },
+
+        "Enchanted Thorium Bar": {
+          "Thorium Bar": 1,
+          "Dream Dust": 3,
+        },
+        "Enchanted Leather": {
+          "Rugged Leather": 1,
+          "Lesser Eternal Essence": 1,
+        },
+
+        "Heavy Runecloth Bandage": { Runecloth: 2 },
+        "Heavy Mageweave Bandage": { "Mageweave cloth": 2 },
+        "Heavy Silk Bandage": { "Silk Cloth": 2 },
+      };
+    </script>
+  </body>
+</html>
