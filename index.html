@@ -506,8 +506,8 @@
             if (cells.length < 2) return;
 
             const itemName = cells[0].textContent.trim();
-            const itemQty = parseInt(cells[1].textContent.trim());
-            const totalItemQty = itemQty * multiplier;
+            const baseQty = parseInt(cells[1].getAttribute("data-base"));
+            const totalItemQty = baseQty * multiplier;
 
             const recipe = materialData[itemName];
 
